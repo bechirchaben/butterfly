@@ -119,6 +119,7 @@ void InferenceWorker::thread_main()
 	std::vector<uint8_t> local_frame;
 	std::vector<float> rgb;
 	std::vector<float> result;
+	std::vector<float> smoothed; // masque lissé dans le temps
 	std::vector<uint8_t> local_mask;
 	uint64_t total_ns = 0;
 	int runs = 0;
@@ -136,6 +137,7 @@ void InferenceWorker::thread_main()
 				input_height = segmenter->get_input_height();
 			}
 			need_load = false;
+			smoothed.clear();
 			total_ns = 0;
 			runs = 0;
 		}
@@ -192,10 +194,21 @@ void InferenceWorker::thread_main()
 			runs = 0;
 		}
 
-		// 5. Conversion du masque float (0.0-1.0) -> octets (0-255), puis publication.
+		// 5. Lissage dans le temps : on mélange le nouveau masque avec le précédent.
+		//    keep = part de l'ancien masque qu'on garde (au plus 90 %, sinon le masque ne suivrait plus).
+		float keep = temporal_smoothing * 0.9f;
+		if (smoothed.size() != pixels) {
+			smoothed = result; // premier masque : rien à mélanger
+		} else {
+			for (size_t i = 0; i < pixels; i++) {
+				smoothed[i] = keep * smoothed[i] + (1.0f - keep) * result[i];
+			}
+		}
+
+		// 6. Conversion du masque float (0.0-1.0) -> octets (0-255), puis publication.
 		local_mask.resize(pixels);
 		for (size_t i = 0; i < pixels; i++) {
-			local_mask[i] = (uint8_t)(std::clamp(result[i], 0.0f, 1.0f) * 255.0f);
+			local_mask[i] = (uint8_t)(std::clamp(smoothed[i], 0.0f, 1.0f) * 255.0f);
 		}
 
 		{

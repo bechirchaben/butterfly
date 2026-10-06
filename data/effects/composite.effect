@@ -1,0 +1,79 @@
+// Butterfly - Sprint 3 : composition personne / fond.
+//
+// image      : la caméra, nette
+// background : le fond de remplacement (Sprint 3 : la caméra floutée)
+// mask       : le masque de l'IA, adouci (0 = fond, 1 = personne)
+//
+// Résultat : là où le masque vaut 1 on garde la caméra nette, là où il vaut 0 on prend le fond.
+
+uniform float4x4 ViewProj;
+uniform texture2d image;
+uniform texture2d background;
+uniform texture2d mask;
+
+// Au-dessus du seuil : personne. En dessous : fond (0.0 à 1.0, 0.5 par défaut).
+uniform float threshold;
+
+// Largeur de la transition autour du seuil : plus elle est grande, plus les bords sont doux.
+uniform float edge_width;
+
+sampler_state textureSampler {
+	Filter   = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+struct VertData {
+	float4 pos : POSITION;
+	float2 uv  : TEXCOORD0;
+};
+
+VertData VSDefault(VertData v_in)
+{
+	VertData vert_out;
+	vert_out.pos = mul(float4(v_in.pos.xyz, 1.0), ViewProj);
+	vert_out.uv  = v_in.uv;
+	return vert_out;
+}
+
+// « Combien ce pixel est-il une personne ? » de 0.0 (fond) à 1.0 (personne).
+float person_amount(float2 uv)
+{
+	float m = mask.Sample(textureSampler, uv).r;
+
+	// smoothstep : 0 en dessous de (seuil - largeur), 1 au-dessus de (seuil + largeur),
+	// et une transition douce entre les deux (au lieu d'une coupure nette).
+	return smoothstep(threshold - edge_width, threshold + edge_width, m);
+}
+
+float4 PSComposite(VertData v_in) : TARGET
+{
+	float4 person = image.Sample(textureSampler, v_in.uv);
+	float4 back   = background.Sample(textureSampler, v_in.uv);
+	return lerp(back, person, person_amount(v_in.uv));
+}
+
+// Mode Debug : affiche le masque final (après seuil et adoucissement) en niveaux de gris.
+float4 PSMaskOnly(VertData v_in) : TARGET
+{
+	float a = person_amount(v_in.uv);
+	return float4(a, a, a, 1.0);
+}
+
+technique Draw
+{
+	pass
+	{
+		vertex_shader = VSDefault(v_in);
+		pixel_shader  = PSComposite(v_in);
+	}
+}
+
+technique DrawMask
+{
+	pass
+	{
+		vertex_shader = VSDefault(v_in);
+		pixel_shader  = PSMaskOnly(v_in);
+	}
+}

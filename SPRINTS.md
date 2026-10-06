@@ -87,11 +87,12 @@
 **Objectif** : le premier vrai effet « Google Meet ».
 
 **Tâches**
-- [ ] Shader de composition : `mix(fond_flou, caméra, masque)`
-- [ ] Curseur « Adoucissement des bords » (feather du masque)
-- [ ] Curseur « Seuil »
-- [ ] Lissage temporel du masque (anti-scintillement)
-- [ ] Mise à l'échelle propre du masque (basse résolution → résolution caméra)
+- [x] Shader de composition : `mix(fond_flou, caméra, masque)` (`composite.effect`) — testé
+- [x] Curseur « Adoucissement des bords » (petit flou du masque + transition `smoothstep`)
+- [x] Curseur « Seuil »
+- [x] Lissage temporel du masque (anti-scintillement), réglable
+- [x] Mise à l'échelle propre du masque (basse résolution → résolution caméra, filtrage linéaire)
+- [x] **Flou masqué** : le fond est flouté sans les pixels de la personne → plus d'auréole sombre autour des cheveux — testé
 
 **Definition of Done** : la personne est nette, le fond flou, les bords ne scintillent pas en mouvement normal.
 

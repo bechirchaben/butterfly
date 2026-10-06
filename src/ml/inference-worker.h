@@ -62,6 +62,11 @@ public:
 	// Change le matériel utilisé (GPU ou CPU) : le modèle est rechargé.
 	void set_use_gpu(bool use_gpu);
 
+	// Lissage dans le temps, de 0.0 (aucun) à 1.0 (maximum).
+	// Chaque nouveau masque est mélangé avec le précédent : moins de scintillement,
+	// mais un léger retard quand on bouge vite.
+	void set_temporal_smoothing(float amount) { temporal_smoothing = amount; }
+
 private:
 	// Fonction exécutée par le thread de l'IA.
 	void thread_main();
@@ -83,4 +88,5 @@ private:
 	// Lisibles sans mutex grâce à std::atomic (lecture/écriture en une seule opération).
 	std::atomic<int> input_width{0};
 	std::atomic<int> input_height{0};
+	std::atomic<float> temporal_smoothing{0.5f};
 };

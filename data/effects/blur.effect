@@ -1,9 +1,17 @@
-// Butterfly - Sprint 1, étape 2 : flou gaussien en une direction.
+// Butterfly - flou gaussien en une direction.
 // Le code C++ l'appelle deux fois : une passe horizontale, puis une passe verticale.
 // Deux passes de 33 lectures donnent le même résultat qu'un flou 33 x 33 (1089 lectures).
+//
+// Deux techniques :
+//   Draw       : flou normal (Sprint 1).
+//   DrawMasked : flou du FOND seulement (Sprint 3). Les pixels de la personne ne comptent pas,
+//                pour que ses couleurs ne « débordent » pas en auréole dans le fond flou.
 
 uniform float4x4 ViewProj;
 uniform texture2d image;
+
+// Masque de l'IA (0 = fond, 1 = personne), utilisé seulement par DrawMasked.
+uniform texture2d mask;
 
 // Décalage entre deux échantillons voisins, en coordonnées uv (0 à 1).
 // Passe horizontale : (pas / largeur, 0). Passe verticale : (0, pas / hauteur).
@@ -28,19 +36,23 @@ VertData VSDefault(VertData v_in)
 	return vert_out;
 }
 
+// Poids d'un voisin selon sa distance : courbe en cloche (gaussienne).
+// Les voisins proches comptent beaucoup, les lointains presque pas.
+float gaussian_weight(float offset)
+{
+	const float sigma = 8.0;
+	return exp(-(offset * offset) / (2.0 * sigma * sigma));
+}
+
 float4 PSBlur(VertData v_in) : TARGET
 {
 	// On lit 16 voisins de chaque côté (+ le pixel lui-même = 33 lectures).
-	// Chaque voisin compte selon une courbe en cloche (gaussienne) :
-	// les voisins proches comptent beaucoup, les lointains presque pas.
-	const float sigma = 8.0;
-
 	float4 sum = float4(0.0, 0.0, 0.0, 0.0);
 	float total_weight = 0.0;
 
 	for (int i = -16; i <= 16; i++) {
 		float offset = float(i);
-		float weight = exp(-(offset * offset) / (2.0 * sigma * sigma));
+		float weight = gaussian_weight(offset);
 
 		sum += image.Sample(textureSampler, v_in.uv + sample_step * offset) * weight;
 		total_weight += weight;
@@ -50,11 +62,45 @@ float4 PSBlur(VertData v_in) : TARGET
 	return sum / total_weight;
 }
 
+float4 PSBlurMasked(VertData v_in) : TARGET
+{
+	float4 sum = float4(0.0, 0.0, 0.0, 0.0);
+	float total_weight = 0.0;
+
+	for (int i = -16; i <= 16; i++) {
+		float offset = float(i);
+		float2 uv = v_in.uv + sample_step * offset;
+
+		// Un voisin compte d'autant moins qu'il appartient à la personne.
+		float background_amount = 1.0 - mask.Sample(textureSampler, uv).r;
+		float weight = gaussian_weight(offset) * background_amount;
+
+		sum += image.Sample(textureSampler, uv) * weight;
+		total_weight += weight;
+	}
+
+	// Pixel entouré uniquement de « personne » : pas de fond à moyenner.
+	// On garde le pixel d'origine (il sera de toute façon caché par la personne nette).
+	if (total_weight < 0.0001)
+		return image.Sample(textureSampler, v_in.uv);
+
+	return sum / total_weight;
+}
+
 technique Draw
 {
 	pass
 	{
 		vertex_shader = VSDefault(v_in);
 		pixel_shader  = PSBlur(v_in);
+	}
+}
+
+technique DrawMasked
+{
+	pass
+	{
+		vertex_shader = VSDefault(v_in);
+		pixel_shader  = PSBlurMasked(v_in);
 	}
 }
