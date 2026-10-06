@@ -35,8 +35,8 @@
 - [ ] Créer le dépôt GitHub public et y pousser le code
 - [x] Récupérer `obs-plugintemplate`, le renommer en `butterfly`, passer le code en C++
 - [x] Configurer et compiler avec les presets CMake Windows x64 (aucun avertissement)
-- [ ] Plugin vide : message `[butterfly] plugin loaded successfully` dans les logs OBS *(code écrit, à tester)*
-- [ ] Filtre « passe-plat » `butterfly_background` visible dans la liste des filtres (l'image passe sans modification) *(code écrit, à tester)*
+- [x] Plugin vide : message `[butterfly] plugin loaded successfully` dans les logs OBS
+- [x] Filtre « passe-plat » `butterfly_background` visible dans la liste des filtres (l'image passe sans modification) — testé dans OBS 32.2.2
 - [x] Scripts `scripts/build.ps1` et `scripts/install-dev.ps1` (voir PROCEDURE §5)
 - [x] Fichiers de traduction `fr-FR.ini` et `en-US.ini`
 

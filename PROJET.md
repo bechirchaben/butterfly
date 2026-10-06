@@ -271,3 +271,4 @@ Liste nommée et stable (ex. `nose_tip`, `nose_bridge`, `left_eye`, `right_eye`,
 | 2026-10-06 | Questions 3 | Nom **Butterfly** (D9) · OBS **32.2.2** (D10) · Effets créés par les utilisateurs, format ouvert (D11). Ajout §10. |
 | 2026-10-06 | Planification | Découpage en 13 sprints ([SPRINTS.md](SPRINTS.md)) et méthode de travail ([PROCEDURE.md](PROCEDURE.md)). |
 | 2026-10-06 | Sprint 0 — démarrage | Template officiel `obs-plugintemplate` intégré et renommé en Butterfly ; code passé en C++ ; filtre passe-plat `butterfly_background` ; traductions fr/en ; scripts `build.ps1` / `install-dev.ps1`. Précision D10 : compilation contre OBS 31.1.1. |
+| 2026-10-06 | Sprint 0 — test | Première compilation réussie (0 avertissement). Butterfly chargé dans OBS 32.2.2, filtre passe-plat ajouté sur la webcam : OK. Reste : envoi sur GitHub. |
