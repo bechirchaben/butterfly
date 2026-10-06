@@ -11,7 +11,7 @@
 | S0 ✅ | Environnement & squelette du plugin | 0 — Socle | Butterfly apparaît dans OBS |
 | S1 ✅ | Premiers shaders & propriétés | 0 — Socle | Flou plein écran réglable |
 | S2 ✅ | Intégration de l'IA (ONNX Runtime) | 0 — Socle | Masque de segmentation affiché |
-| S3 | Fond flou (cœur du MVP) | 1 — Arrière-plan | Premier rendu type Google Meet |
+| S3 ✅ | Fond flou (cœur du MVP) | 1 — Arrière-plan | Premier rendu type Google Meet |
 | S4 | Modes image, source OBS, transparent | 1 — Arrière-plan | Les 4 modes fonctionnent |
 | S5 | Qualité, performance & release v0.1 | 1 — Arrière-plan | 🚀 **v0.1.0 publique** |
 | S6 | Tracking du visage | 2 — Visage | Landmarks stables |
@@ -90,7 +90,7 @@
 - [x] Shader de composition : `mix(fond_flou, caméra, masque)` (`composite.effect`) — testé
 - [x] Curseur « Adoucissement des bords » (petit flou du masque + transition `smoothstep`)
 - [x] Curseur « Seuil »
-- [x] Lissage temporel du masque (anti-scintillement), réglable
+- [x] Lissage temporel du masque (anti-scintillement), réglable et **adaptatif** : les petites variations (scintillement) sont lissées, les grands mouvements passent sans retard — testé
 - [x] Mise à l'échelle propre du masque (basse résolution → résolution caméra, filtrage linéaire)
 - [x] **Flou masqué** : le fond est flouté sans les pixels de la personne → plus d'auréole sombre autour des cheveux — testé
 
@@ -259,3 +259,4 @@ Machine de développement : AMD Radeon(TM) Graphics (GPU intégré), CPU 8 cœur
 | 2026-10-06 | S2 | IA en continu sur la webcam, CPU | 5,15 ms / analyse | — | — |
 | 2026-10-06 | S2 | Chargement du modèle dans le thread de l'IA | ≈ 1,4 s, **non bloquant** ✅ | — | — |
 | 2026-10-06 | S2 | Mode Debug (capture + réduction + copie GPU→CPU + masque), IA GPU limitée à 60 analyses/s | **2,6 ms** (IA : ≈ 9,4 ms / analyse, en arrière-plan) | 4 / 1 969 (0,2 %) | 3 % |
+| 2026-10-06 | S3 | Flou d'arrière-plan complet (flou masqué 2 passes + adoucissement du masque + composition), IA GPU | **2,1 ms** (IA : ≈ 9,5 ms / analyse) | 17 / 11 793 (0,1 %) | 2,5 % |

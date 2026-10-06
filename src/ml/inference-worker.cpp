@@ -24,6 +24,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <plugin-support.h>
 
 #include <algorithm>
+#include <cmath>
 #include <cstring>
 #include <memory>
 
@@ -194,14 +195,25 @@ void InferenceWorker::thread_main()
 			runs = 0;
 		}
 
-		// 5. Lissage dans le temps : on mélange le nouveau masque avec le précédent.
+		// 5. Lissage dans le temps, ADAPTATIF :
+		//    - petite variation d'un pixel (bord qui hésite) = scintillement -> on lisse ;
+		//    - grande variation (une main passe du fond à la personne) = vrai mouvement
+		//      -> on prend le nouveau masque tout de suite, sans retard.
 		//    keep = part de l'ancien masque qu'on garde (au plus 90 %, sinon le masque ne suivrait plus).
 		float keep = temporal_smoothing * 0.9f;
 		if (smoothed.size() != pixels) {
 			smoothed = result; // premier masque : rien à mélanger
 		} else {
 			for (size_t i = 0; i < pixels; i++) {
-				smoothed[i] = keep * smoothed[i] + (1.0f - keep) * result[i];
+				float change = std::abs(result[i] - smoothed[i]);
+
+				// motion : 0 si la variation est petite (< 0.1), 1 si elle est grande (> 0.4),
+				// transition douce entre les deux.
+				float t = std::clamp((change - 0.1f) / 0.3f, 0.0f, 1.0f);
+				float motion = t * t * (3.0f - 2.0f * t);
+
+				float pixel_keep = keep * (1.0f - motion);
+				smoothed[i] = pixel_keep * smoothed[i] + (1.0f - pixel_keep) * result[i];
 			}
 		}
 
