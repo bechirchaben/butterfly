@@ -30,7 +30,7 @@
 
 **Tâches**
 - [x] Git (déjà installé)
-- [ ] Installer Visual Studio 2022 (charge « Développement Desktop en C++ » + Windows 11 SDK 10.0.22621) et CMake ≥ 3.28
+- [x] Installer Visual Studio 2022 (charge « Développement Desktop en C++ » + Windows 11 SDK 10.0.22621) et CMake ≥ 3.28
 - [x] Créer le dépôt Git local (licence GPL-2.0-or-later)
 - [ ] Créer le dépôt GitHub public et y pousser le code
 - [x] Récupérer `obs-plugintemplate`, le renommer en `butterfly`, passer le code en C++
