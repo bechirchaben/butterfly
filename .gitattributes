@@ -1,0 +1,11 @@
+# Fins de ligne : LF dans le dépôt, conversion automatique pour les fichiers texte.
+* text=auto
+
+# Scripts PowerShell : CRLF sous Windows.
+*.ps1 text eol=crlf
+
+# Fichiers binaires : jamais modifiés par Git.
+*.onnx binary
+*.png binary
+*.jpg binary
+*.glb binary

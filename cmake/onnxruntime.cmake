@@ -23,7 +23,8 @@ function(_butterfly_fetch_nuget name version hash out_dir)
   if(NOT EXISTS "${_archive}")
     message(STATUS "Butterfly: téléchargement de ${name} ${version}...")
     file(
-      DOWNLOAD "https://api.nuget.org/v3-flatcontainer/${name}/${version}/${name}.${version}.nupkg" "${_archive}"
+      DOWNLOAD "https://api.nuget.org/v3-flatcontainer/${name}/${version}/${name}.${version}.nupkg"
+      "${_archive}"
       EXPECTED_HASH SHA256=${hash}
       SHOW_PROGRESS
     )

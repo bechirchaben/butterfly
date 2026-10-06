@@ -36,7 +36,8 @@ Expliquer → Coder → Compiler → Tester dans OBS → Commit Git
 2. **Coder** : un changement à la fois, code simple et commenté.
 3. **Compiler** : voir §5.
 4. **Tester** : vérifier dans OBS et lire les logs.
-5. **Commit** : un commit par étape qui fonctionne.
+5. **Mise en forme** : `.\scriptsormat.ps1` (la CI GitHub refuse le code C++ mal formaté).
+6. **Commit** : un commit par étape qui fonctionne.
 
 Règle : on ne passe **jamais** à l'étape suivante tant que la précédente ne marche pas.
 
@@ -91,6 +92,7 @@ Règle : on ne passe **jamais** à l'étape suivante tant que la précédente ne
 
 Une tâche est terminée quand :
 - [ ] elle compile sans nouvel avertissement ;
+- [ ] le code est mis en forme (`.\scriptsormat.ps1`) et la CI GitHub (Windows + vérification du format) est verte ;
 - [ ] elle a été testée dans OBS 32.2.2 ;
 - [ ] les textes sont traduits (fr/en) ;
 - [ ] elle n'a pas fait baisser les performances de façon visible ;

@@ -78,8 +78,8 @@ bool onnx_runtime_load()
 	const OrtApiBase *api_base = OrtGetApiBase();
 	const OrtApi *api = api_base->GetApi(ORT_API_VERSION);
 	if (!api) {
-		obs_log(LOG_ERROR, "ONNX Runtime %s is too old (API version %d required)",
-			api_base->GetVersionString(), ORT_API_VERSION);
+		obs_log(LOG_ERROR, "ONNX Runtime %s is too old (API version %d required)", api_base->GetVersionString(),
+			ORT_API_VERSION);
 		return false;
 	}
 
