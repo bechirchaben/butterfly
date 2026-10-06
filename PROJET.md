@@ -85,6 +85,8 @@ Plutôt qu'un filtre monolithique, plusieurs filtres combinables dans la chaîne
 - **Multi-visages** : hors périmètre pour l'instant (D7), mais structures prévues pour.
 - **Rendu 3D** : chantier le plus lourd (pose, glTF, occlusion) → découpé sur 3 sprints.
 - **Courbe d'apprentissage C++** : sprints du début volontairement plus légers et pédagogiques.
+- **Licence DirectML** : `DirectML.dll` est un binaire Microsoft non open source, redistribuable selon sa licence. **Vérifier sa compatibilité avec la GPL avant la release v0.1 (S5)** ; alternative : backend CPU seul ou WinML.
+- **DLL système en conflit** : Windows fournit un ancien `onnxruntime.dll` dans System32 → Butterfly charge le sien par chemin complet (`/DELAYLOAD` + `src/ml/onnx-loader.cpp`).
 - **Format d'effet public** : une fois publié, difficile à casser → versionner (`format_version`) dès la v1.
 - **Existant** : `obs-backgroundremoval` (royshil) couvre déjà la partie fond → s'en inspirer, se différencier sur les effets visage.
 
@@ -274,3 +276,4 @@ Liste nommée et stable (ex. `nose_tip`, `nose_bridge`, `left_eye`, `right_eye`,
 | 2026-10-06 | Sprint 0 — test | Première compilation réussie (0 avertissement). Butterfly chargé dans OBS 32.2.2, filtre passe-plat ajouté sur la webcam : OK. Reste : envoi sur GitHub. |
 | 2026-10-06 | Sprint 0 — clôture | Seul le nom de l'auteur est public : e-mail retiré de `buildspec.json` et commits signés avec l'adresse GitHub *noreply* (historique local réécrit avant le premier envoi). Code publié sur https://github.com/bechirchaben/butterfly. **Sprint 0 terminé.** |
 | 2026-10-06 | Sprint 1 — clôture | Teinte rouge et flou plein écran en deux passes, réglables (Mode + Intensité). Référence perf : 0,5 ms / image à 60 FPS. Machine de dev = **GPU AMD intégré** → confirme DirectML (D6) et impose des modèles IA légers. Rappel : le flou de *l'arrière-plan seul* arrive au S3, une fois le masque IA (S2) disponible. **Sprint 1 terminé.** |
+| 2026-10-06 | Sprint 2 — étape 1 | ONNX Runtime 1.24.4 + DirectML 1.15.4 intégrés (dernière version d'ORT avec DirectML). Modèle `selfie_segmentation.onnx` (Apache-2.0). IA chargée sur le GPU AMD : 3,82 ms / analyse. OpenCV abandonné (réduction d'image sur GPU). Risques ajoutés : licence DirectML, DLL System32. |

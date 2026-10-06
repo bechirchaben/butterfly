@@ -68,10 +68,10 @@
 **Objectif** : faire tourner un modèle de segmentation sur l'image de la caméra.
 
 **Tâches**
-- [ ] Téléchargement automatique d'ONNX Runtime (avec DirectML) et d'OpenCV par CMake dans `deps/`
-- [ ] Choix et téléchargement du premier modèle (MediaPipe Selfie Segmentation, Apache-2.0)
+- [x] Téléchargement automatique d'ONNX Runtime 1.24.4 + DirectML 1.15.4 par CMake dans `.deps/` (empreintes SHA-256 vérifiées). OpenCV abandonné : la réduction d'image se fera sur le GPU
+- [x] Premier modèle : `selfie_segmentation.onnx` (MediaPipe, Apache-2.0, entrée 256×256 NHWC, sortie masque 256×256)
 - [ ] Copie de l'image GPU → CPU (`gs_stagesurface`) et réduction de taille
-- [ ] Classe `Segmenter` : charge le modèle, lance l'inférence, renvoie un masque
+- [x] Classe `Segmenter` : charge le modèle, lance l'inférence, renvoie un masque — auto-test OK : **3,82 ms sur GPU AMD**
 - [ ] Thread d'inférence (`InferenceWorker`) : le thread vidéo d'OBS n'attend jamais
 - [ ] Mode debug : afficher le masque en noir et blanc
 - [ ] Choix GPU (DirectML) / CPU dans les propriétés, avec repli automatique
@@ -250,3 +250,5 @@ Machine de développement : AMD Radeon(TM) Graphics (GPU intégré), CPU 8 cœur
 | Date | Sprint | Configuration du filtre | Temps moyen de rendu | Images manquées (rendu) | CPU OBS |
 |---|---|---|---|---|---|
 | 2026-10-06 | S1 | Flou plein écran 100 % (2 × 33 échantillons) | 0,5 ms | 3 / 13 695 (0,0 %) | 1,8 % |
+| 2026-10-06 | S2 | Inférence seule `selfie_segmentation` 256×256, DirectML (auto-test, 2e passage) | 3,82 ms / analyse | — | — |
+| 2026-10-06 | S2 | Chargement du modèle sur DirectML (au démarrage d'OBS) | ≈ 1,1 s ⚠️ bloquant → à déplacer dans un thread (étape 3) | — | — |

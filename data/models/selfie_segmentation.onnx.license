@@ -1,0 +1,10 @@
+SPDX-FileCopyrightText: 2021 Google LLC
+SPDX-FileCopyrightText: 2021 Katsuya Hyodo
+SPDX-FileCopyrightText: 2021-2026 Roy Shilkrot <roy.shil@gmail.com>
+SPDX-FileCopyrightText: 2023-2026 Kaito Udagawa <umireon@kaito.tokyo>
+
+SPDX-License-Identifier: Apache-2.0
+
+Source: MediaPipe Selfie Segmentation (Google), converted to ONNX by Katsuya Hyodo (PINTO_model_zoo),
+redistributed by obs-backgroundremoval: https://github.com/royshil/obs-backgroundremoval/tree/main/data/models
+Full license text: https://www.apache.org/licenses/LICENSE-2.0
