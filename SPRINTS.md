@@ -34,7 +34,7 @@
 - [x] Créer le dépôt Git local (licence GPL-2.0-or-later)
 - [ ] Créer le dépôt GitHub public et y pousser le code
 - [x] Récupérer `obs-plugintemplate`, le renommer en `butterfly`, passer le code en C++
-- [ ] Configurer et compiler avec les presets CMake Windows x64
+- [x] Configurer et compiler avec les presets CMake Windows x64 (aucun avertissement)
 - [ ] Plugin vide : message `[butterfly] plugin loaded successfully` dans les logs OBS *(code écrit, à tester)*
 - [ ] Filtre « passe-plat » `butterfly_background` visible dans la liste des filtres (l'image passe sans modification) *(code écrit, à tester)*
 - [x] Scripts `scripts/build.ps1` et `scripts/install-dev.ps1` (voir PROCEDURE §5)

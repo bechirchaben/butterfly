@@ -1,4 +1,4 @@
-# Compile Butterfly (configuration RelWithDebInfo).
+﻿# Compile Butterfly (configuration RelWithDebInfo).
 # Usage : .\scripts\build.ps1            -> configure si besoin, puis compile
 #         .\scripts\build.ps1 -Clean     -> supprime build_x64 et recompile tout
 
@@ -6,7 +6,9 @@ param(
     [switch]$Clean
 )
 
-$ErrorActionPreference = 'Stop'
+# Pas de 'Stop' global : sous PowerShell 5.1, un simple avertissement de CMake
+# (écrit sur stderr) serait traité comme une erreur fatale. On teste $LASTEXITCODE à la place.
+$ErrorActionPreference = 'Continue'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 

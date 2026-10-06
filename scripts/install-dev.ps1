@@ -1,9 +1,11 @@
-# Installe la version compilée de Butterfly dans OBS pour la tester.
+﻿# Installe la version compilée de Butterfly dans OBS pour la tester.
 # OBS charge les plugins placés dans C:\ProgramData\obs-studio\plugins\<nom>\
 #   bin\64bit\butterfly.dll  et  data\ (traductions, shaders, modèles)
 # Usage : .\scripts\install-dev.ps1   (OBS doit être fermé)
 
-$ErrorActionPreference = 'Stop'
+# Pas de 'Stop' global : sous PowerShell 5.1, un simple avertissement de CMake
+# (écrit sur stderr) serait traité comme une erreur fatale. On teste $LASTEXITCODE à la place.
+$ErrorActionPreference = 'Continue'
 $root = Split-Path -Parent $PSScriptRoot
 $prefix = Join-Path $env:ProgramData 'obs-studio\plugins'
 
