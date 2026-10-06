@@ -1,0 +1,60 @@
+// Butterfly - Sprint 1, étape 2 : flou gaussien en une direction.
+// Le code C++ l'appelle deux fois : une passe horizontale, puis une passe verticale.
+// Deux passes de 33 lectures donnent le même résultat qu'un flou 33 x 33 (1089 lectures).
+
+uniform float4x4 ViewProj;
+uniform texture2d image;
+
+// Décalage entre deux échantillons voisins, en coordonnées uv (0 à 1).
+// Passe horizontale : (pas / largeur, 0). Passe verticale : (0, pas / hauteur).
+uniform float2 sample_step;
+
+sampler_state textureSampler {
+	Filter   = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+struct VertData {
+	float4 pos : POSITION;
+	float2 uv  : TEXCOORD0;
+};
+
+VertData VSDefault(VertData v_in)
+{
+	VertData vert_out;
+	vert_out.pos = mul(float4(v_in.pos.xyz, 1.0), ViewProj);
+	vert_out.uv  = v_in.uv;
+	return vert_out;
+}
+
+float4 PSBlur(VertData v_in) : TARGET
+{
+	// On lit 16 voisins de chaque côté (+ le pixel lui-même = 33 lectures).
+	// Chaque voisin compte selon une courbe en cloche (gaussienne) :
+	// les voisins proches comptent beaucoup, les lointains presque pas.
+	const float sigma = 8.0;
+
+	float4 sum = float4(0.0, 0.0, 0.0, 0.0);
+	float total_weight = 0.0;
+
+	for (int i = -16; i <= 16; i++) {
+		float offset = float(i);
+		float weight = exp(-(offset * offset) / (2.0 * sigma * sigma));
+
+		sum += image.Sample(textureSampler, v_in.uv + sample_step * offset) * weight;
+		total_weight += weight;
+	}
+
+	// On divise par la somme des poids pour garder la même luminosité.
+	return sum / total_weight;
+}
+
+technique Draw
+{
+	pass
+	{
+		vertex_shader = VSDefault(v_in);
+		pixel_shader  = PSBlur(v_in);
+	}
+}

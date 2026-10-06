@@ -52,9 +52,9 @@
 
 **Tâches**
 - [x] Premier fichier `.effect` : teinter l'image en rouge — testé
-- [ ] Premières propriétés du filtre (liste « Mode », curseur « Intensité »)
-- [ ] Flou plein écran en deux passes (horizontale + verticale) avec intensité réglable
-- [ ] Rendu dans des textures intermédiaires (`gs_texrender`)
+- [x] Premières propriétés du filtre (liste « Mode », curseur « Intensité »)
+- [x] Flou plein écran en deux passes (horizontale + verticale) avec intensité réglable — testé
+- [x] Rendu dans des textures intermédiaires (`gs_texrender`)
 - [ ] Première mesure du temps de rendu (logs)
 
 **À apprendre** : pipeline graphique d'OBS (`gs_*`), shaders HLSL, textures, propriétés `obs_properties_t`.
