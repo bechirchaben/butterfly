@@ -9,7 +9,7 @@
 | Sprint | Thème | Phase | Jalon |
 |---|---|---|---|
 | S0 ✅ | Environnement & squelette du plugin | 0 — Socle | Butterfly apparaît dans OBS |
-| S1 | Premiers shaders & propriétés | 0 — Socle | Flou plein écran réglable |
+| S1 ✅ | Premiers shaders & propriétés | 0 — Socle | Flou plein écran réglable |
 | S2 | Intégration de l'IA (ONNX Runtime) | 0 — Socle | Masque de segmentation affiché |
 | S3 | Fond flou (cœur du MVP) | 1 — Arrière-plan | Premier rendu type Google Meet |
 | S4 | Modes image, source OBS, transparent | 1 — Arrière-plan | Les 4 modes fonctionnent |
@@ -55,7 +55,7 @@
 - [x] Premières propriétés du filtre (liste « Mode », curseur « Intensité »)
 - [x] Flou plein écran en deux passes (horizontale + verticale) avec intensité réglable — testé
 - [x] Rendu dans des textures intermédiaires (`gs_texrender`)
-- [ ] Première mesure du temps de rendu (logs)
+- [x] Première mesure du temps de rendu (Statistiques OBS) — voir « Mesures de performance » en bas de ce fichier
 
 **À apprendre** : pipeline graphique d'OBS (`gs_*`), shaders HLSL, textures, propriétés `obs_properties_t`.
 
@@ -240,3 +240,13 @@
 - Éditeur visuel d'effets ❓
 - Face swap, effet vieillissement
 - Support CUDA en option
+
+---
+
+## Mesures de performance
+
+Machine de développement : AMD Radeon(TM) Graphics (GPU intégré), CPU 8 cœurs / 16 threads, OBS 32.2.2 (D3D11), canevas 2880×1620 → sortie 1920×1080 à 60 FPS, webcam 1280×720 à 30 FPS.
+
+| Date | Sprint | Configuration du filtre | Temps moyen de rendu | Images manquées (rendu) | CPU OBS |
+|---|---|---|---|---|---|
+| 2026-10-06 | S1 | Flou plein écran 100 % (2 × 33 échantillons) | 0,5 ms | 3 / 13 695 (0,0 %) | 1,8 % |
