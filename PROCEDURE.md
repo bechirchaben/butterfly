@@ -47,6 +47,8 @@ Règle : on ne passe **jamais** à l'étape suivante tant que la précédente ne
 - Une branche par tâche : `feature/s0-squelette`, `fix/masque-scintille`…
 - Messages de commit courts, au présent : `Ajoute le filtre passe-plat`, `Corrige le flou en mode CPU`.
 - Fusion dans `main` quand l'étape est testée.
+- Dépôt public : https://github.com/bechirchaben/butterfly
+- **Confidentialité** : seul le nom de l'auteur est public. Les commits utilisent l'adresse GitHub *noreply* (`git config user.email` local au projet) et aucune adresse e-mail ne doit apparaître dans les fichiers.
 
 ### Code C++
 - C++17, style proche de celui d'OBS : `snake_case` pour les fonctions et variables, `PascalCase` pour les classes.

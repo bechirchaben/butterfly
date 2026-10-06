@@ -8,7 +8,7 @@
 
 | Sprint | Thème | Phase | Jalon |
 |---|---|---|---|
-| S0 | Environnement & squelette du plugin | 0 — Socle | Butterfly apparaît dans OBS |
+| S0 ✅ | Environnement & squelette du plugin | 0 — Socle | Butterfly apparaît dans OBS |
 | S1 | Premiers shaders & propriétés | 0 — Socle | Flou plein écran réglable |
 | S2 | Intégration de l'IA (ONNX Runtime) | 0 — Socle | Masque de segmentation affiché |
 | S3 | Fond flou (cœur du MVP) | 1 — Arrière-plan | Premier rendu type Google Meet |
@@ -32,7 +32,7 @@
 - [x] Git (déjà installé)
 - [x] Installer Visual Studio 2022 (charge « Développement Desktop en C++ » + Windows 11 SDK 10.0.22621) et CMake ≥ 3.28
 - [x] Créer le dépôt Git local (licence GPL-2.0-or-later)
-- [ ] Créer le dépôt GitHub public et y pousser le code
+- [x] Créer le dépôt GitHub public et y pousser le code : https://github.com/bechirchaben/butterfly
 - [x] Récupérer `obs-plugintemplate`, le renommer en `butterfly`, passer le code en C++
 - [x] Configurer et compiler avec les presets CMake Windows x64 (aucun avertissement)
 - [x] Plugin vide : message `[butterfly] plugin loaded successfully` dans les logs OBS
