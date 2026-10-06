@@ -19,5 +19,5 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #pragma once
 
 // Filtre « Butterfly - Arrière-plan IA » (flou / image / source / transparent).
-// Pour l'instant (Sprint 0) c'est un filtre passe-plat : l'image n'est pas modifiée.
+// Sprint 1 : sert de terrain d'apprentissage des shaders (teinte rouge réglable).
 void register_background_filter();

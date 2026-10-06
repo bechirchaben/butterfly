@@ -17,12 +17,12 @@ if ($Clean -and (Test-Path "$root\build_x64")) {
     Remove-Item -Recurse -Force "$root\build_x64"
 }
 
-# La configuration télécharge les sources d'OBS et ses dépendances (une seule fois, plusieurs minutes).
-if (-not (Test-Path "$root\build_x64\CMakeCache.txt")) {
-    Write-Host "Configuration CMake..."
-    cmake --preset windows-x64
-    if ($LASTEXITCODE -ne 0) { throw "La configuration CMake a échoué." }
-}
+# Configuration : la 1re fois, télécharge les sources d'OBS et ses dépendances (plusieurs minutes).
+# Ensuite elle ne prend que quelques secondes, et elle est nécessaire pour que CMake voie
+# les nouveaux fichiers ajoutés dans data/ (shaders, traductions...).
+Write-Host "Configuration CMake..."
+cmake --preset windows-x64
+if ($LASTEXITCODE -ne 0) { throw "La configuration CMake a échoué." }
 
 Write-Host "Compilation..."
 cmake --build --preset windows-x64

@@ -51,7 +51,7 @@
 **Objectif** : maîtriser le rendu GPU dans OBS.
 
 **Tâches**
-- [ ] Premier fichier `.effect` : teinter l'image en rouge
+- [x] Premier fichier `.effect` : teinter l'image en rouge — testé
 - [ ] Premières propriétés du filtre (liste « Mode », curseur « Intensité »)
 - [ ] Flou plein écran en deux passes (horizontale + verticale) avec intensité réglable
 - [ ] Rendu dans des textures intermédiaires (`gs_texrender`)

@@ -1,0 +1,54 @@
+// Butterfly - Sprint 1, étape 1 : premier shader.
+// Teinte l'image en rouge. "intensity" va de 0 (image d'origine) à 1 (rouge à fond).
+//
+// Un fichier .effect contient :
+//   - des "uniform" : des valeurs envoyées par le code C++ (image, réglages...)
+//   - un vertex shader : place les coins de l'image à l'écran (toujours le même, on le recopie)
+//   - un pixel shader : calcule la couleur de CHAQUE pixel, en parallèle sur la carte graphique
+//   - une "technique" : dit quels shaders utiliser ensemble
+
+uniform float4x4 ViewProj;    // fourni par OBS : position de l'image à l'écran
+uniform texture2d image;      // fourni par OBS : l'image de la source (la caméra)
+uniform float intensity;      // fourni par Butterfly : la valeur du curseur (0.0 à 1.0)
+
+// Comment lire la texture : interpolation linéaire, pas de répétition sur les bords.
+sampler_state textureSampler {
+	Filter   = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+// Données d'un sommet : sa position et ses coordonnées dans l'image (uv, de 0 à 1).
+struct VertData {
+	float4 pos : POSITION;
+	float2 uv  : TEXCOORD0;
+};
+
+VertData VSDefault(VertData v_in)
+{
+	VertData vert_out;
+	vert_out.pos = mul(float4(v_in.pos.xyz, 1.0), ViewProj);
+	vert_out.uv  = v_in.uv;
+	return vert_out;
+}
+
+float4 PSTint(VertData v_in) : TARGET
+{
+	// Couleur du pixel d'origine (r, g, b, a entre 0 et 1).
+	float4 color = image.Sample(textureSampler, v_in.uv);
+
+	// Version "rouge" : on garde le rouge et on réduit fortement le vert et le bleu.
+	float3 red = float3(color.r, color.g * 0.2, color.b * 0.2);
+
+	// lerp = mélange : 0 -> couleur d'origine, 1 -> version rouge.
+	return float4(lerp(color.rgb, red, intensity), color.a);
+}
+
+technique Draw
+{
+	pass
+	{
+		vertex_shader = VSDefault(v_in);
+		pixel_shader  = PSTint(v_in);
+	}
+}
