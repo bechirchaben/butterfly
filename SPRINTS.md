@@ -70,11 +70,11 @@
 **Tâches**
 - [x] Téléchargement automatique d'ONNX Runtime 1.24.4 + DirectML 1.15.4 par CMake dans `.deps/` (empreintes SHA-256 vérifiées). OpenCV abandonné : la réduction d'image se fera sur le GPU
 - [x] Premier modèle : `selfie_segmentation.onnx` (MediaPipe, Apache-2.0, entrée 256×256 NHWC, sortie masque 256×256)
-- [ ] Copie de l'image GPU → CPU (`gs_stagesurface`) et réduction de taille
+- [x] Réduction de l'image à 256×256 sur le GPU, puis copie GPU → CPU (`gs_stagesurface`)
 - [x] Classe `Segmenter` : charge le modèle, lance l'inférence, renvoie un masque — auto-test OK : **3,82 ms sur GPU AMD**
-- [ ] Thread d'inférence (`InferenceWorker`) : le thread vidéo d'OBS n'attend jamais
-- [ ] Mode debug : afficher le masque en noir et blanc
-- [ ] Choix GPU (DirectML) / CPU dans les propriétés, avec repli automatique
+- [x] Thread d'inférence (`InferenceWorker`) : le thread vidéo d'OBS n'attend jamais ; modèle chargé en arrière-plan ; une seule image envoyée par image d'OBS (`video_tick`)
+- [x] Mode debug : afficher le masque en noir et blanc — testé, silhouette correcte
+- [x] Choix GPU (DirectML) / CPU dans les propriétés, avec repli automatique — testé dans les deux modes
 
 **À apprendre** : threads et mutex en C++, ONNX Runtime, format des tenseurs.
 
@@ -252,3 +252,6 @@ Machine de développement : AMD Radeon(TM) Graphics (GPU intégré), CPU 8 cœur
 | 2026-10-06 | S1 | Flou plein écran 100 % (2 × 33 échantillons) | 0,5 ms | 3 / 13 695 (0,0 %) | 1,8 % |
 | 2026-10-06 | S2 | Inférence seule `selfie_segmentation` 256×256, DirectML (auto-test, 2e passage) | 3,82 ms / analyse | — | — |
 | 2026-10-06 | S2 | Chargement du modèle sur DirectML (au démarrage d'OBS) | ≈ 1,1 s ⚠️ bloquant → à déplacer dans un thread (étape 3) | — | — |
+| 2026-10-06 | S2 | IA en continu sur la webcam, GPU (DirectML) | 5,2 – 5,6 ms / analyse (9,1 – 9,5 ms après changement de matériel) | — | — |
+| 2026-10-06 | S2 | IA en continu sur la webcam, CPU | 5,15 ms / analyse | — | — |
+| 2026-10-06 | S2 | Chargement du modèle dans le thread de l'IA | ≈ 1,4 s, **non bloquant** ✅ | — | — |

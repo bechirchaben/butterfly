@@ -42,6 +42,8 @@ target_sources(
     src/background-filter.h
     src/ml/onnx-loader.cpp
     src/ml/onnx-loader.h
+    src/ml/inference-worker.cpp
+    src/ml/inference-worker.h
     src/ml/segmenter.cpp
     src/ml/segmenter.h
 )
